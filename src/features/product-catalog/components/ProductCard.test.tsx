@@ -17,7 +17,7 @@ describe('ProductCard', () => {
 		render(<ProductCard product={product} onAddToCart={vi.fn()} />)
 
 		expect(screen.getByText('Zapatillas retro')).toBeInTheDocument()
-		expect(screen.getByText('$49.90')).toBeInTheDocument()
+		expect(screen.getByText('EUR 49,90')).toBeInTheDocument()
 		expect(screen.getByRole('button', { name: 'Me lo llevo' })).toBeInTheDocument()
 	})
 

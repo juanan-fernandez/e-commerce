@@ -1,4 +1,5 @@
 import type { Product } from '@shared/types/Product'
+import { formatPrice } from '@shared/utils/formatPrice'
 
 type ProductCardProps = {
 	product: Product
@@ -11,7 +12,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
 			<img className='mb-4 h-48 w-full rounded-lg object-cover' src={product.image} alt={product.name} />
 			<h2 className='text-lg font-semibold'>{product.name}</h2>
 			<p className='mt-1 text-sm text-slate-400'>{product.description}</p>
-			<p className='mt-2 text-cyan-400'>${product.price.toFixed(2)}</p>
+			<p className='mt-2 text-cyan-400'>{formatPrice(product.price)}</p>
 			<button
 				type='button'
 				className='mt-4 rounded-md bg-cyan-500 px-4 py-2 font-medium text-slate-950 cursor-pointer hover:bg-cyan-600'
