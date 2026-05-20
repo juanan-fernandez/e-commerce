@@ -15,12 +15,10 @@
 		"jsx": "react-jsx",
 		"strict": true,
 		"noFallthroughCasesInSwitch": true,
-		"ignoreDeprecations": "6.0",
-		"baseUrl": ".",
 		"paths": {
-			"@shared/*": ["src/shared/*"],
-			"@features/*": ["src/features/*"],
-			"@infrastructure/*": ["src/infrastructure/*"]
+			"@shared/*": ["./src/shared/*"],
+			"@features/*": ["./src/features/*"],
+			"@infrastructure/*": ["./src/infrastructure/*"]
 		}
 	},
 	"include": ["src"],

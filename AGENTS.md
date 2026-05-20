@@ -38,24 +38,17 @@ src/
 │ ├── utils/
 │ ├── constants/
 │ ├── components/
-│ ├── strategies/
 │ └── hooks/
 ├── features/
 │ ├── product-catalog/
-│ │ ├── components/
-│ │ ├── services/
-│ │ ├── hooks/
-│ │ └── models.ts
+│ │ |── components/
+│ │
 │ ├── shopping-cart/
 │ │ ├── components/
-│ │ ├── services/
-│ │ ├── hooks/
-│ │ └── models.ts
+│ │
 │ └── auth/
 │ ├── components/
-│ ├── services/
-│ ├── hooks/
-│ └── models.ts
+│
 ├── context/
 │ ├── CartContextValue.ts
 │ ├── CartContext.ts
