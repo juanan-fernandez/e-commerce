@@ -105,7 +105,11 @@ Test files must be excluded from the app TypeScript compilation:
 
 Never use `allowExportNames` as a workaround. Fix the actual export/import issue instead.
 
-### 4. Husky Setup Order
+### 4. Code identation
+
+The code generated must be indented with 3 tabs.
+
+### 5. Husky Setup Order
 
 Git must be initialized before Husky. Always follow this order:
 
