@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { createContext, createElement, useEffect, useReducer, useRef } from 'react'
 import type { CartItem } from '@shared/types/Cart'
 import type { Product } from '@shared/types/Product'
+import { DiscountCalculator } from '@shared/strategies/DiscountCalculator'
 import { calculateCartSubTotal } from '@shared/utils/calculateCartSubTotal'
 import type { CartContextValue } from './CartContextValue'
 
@@ -32,6 +33,7 @@ type ClearCartAction = {
 type CartAction = AddItemAction | RemoveItemAction | UpdateQuantityAction | ClearCartAction
 
 const CART_STORAGE_KEY = 'cart-items'
+const discountCalculator = new DiscountCalculator()
 
 export const CartContext = createContext<CartContextValue | undefined>(undefined)
 
@@ -88,6 +90,10 @@ type CartProviderProps = {
 export function CartProvider({ children }: CartProviderProps) {
 	const [items, dispatch] = useReducer(cartReducer, [], initializeCart)
 	const isInitialAmount = useRef(true)
+	const subtotal = calculateCartSubTotal(items)
+	const discountBreakdown = discountCalculator.getBreakdown(items)
+	const discount = discountBreakdown.reduce((total, currentDiscount) => total + currentDiscount.amount, 0)
+	const total = subtotal - discount
 
 	useEffect(() => {
 		if (isInitialAmount.current) {
@@ -101,7 +107,10 @@ export function CartProvider({ children }: CartProviderProps) {
 	const value: CartContextValue = {
 		items,
 		itemCount: items.reduce((total, item) => total + item.quantity, 0),
-		subtotal: calculateCartSubTotal(items),
+		subtotal,
+		discount,
+		total,
+		discountBreakdown,
 		addItem: product => {
 			dispatch({ type: 'ADD_ITEM', payload: product })
 		},

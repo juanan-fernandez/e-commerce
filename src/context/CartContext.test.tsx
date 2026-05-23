@@ -42,6 +42,9 @@ describe('CartContext', () => {
 		expect(result.current.items).toEqual([])
 		expect(result.current.itemCount).toBe(0)
 		expect(result.current.subtotal).toBe(0)
+		expect(result.current.discount).toBe(0)
+		expect(result.current.total).toBe(0)
+		expect(result.current.discountBreakdown).toEqual([])
 	})
 
 	it('loads the cart from localStorage on startup', () => {
@@ -54,6 +57,9 @@ describe('CartContext', () => {
 		expect(result.current.items).toEqual(storedItems)
 		expect(result.current.itemCount).toBe(2)
 		expect(result.current.subtotal).toBe(99.98)
+		expect(result.current.discount).toBe(0)
+		expect(result.current.total).toBe(99.98)
+		expect(result.current.discountBreakdown).toEqual([])
 	})
 
 	it('addItem adds a new product with quantity 1', () => {
@@ -123,6 +129,9 @@ describe('CartContext', () => {
 		expect(result.current.items).toEqual([])
 		expect(result.current.itemCount).toBe(0)
 		expect(result.current.subtotal).toBe(0)
+		expect(result.current.discount).toBe(0)
+		expect(result.current.total).toBe(0)
+		expect(result.current.discountBreakdown).toEqual([])
 	})
 
 	it('itemCount sums all item quantities', () => {
@@ -148,5 +157,26 @@ describe('CartContext', () => {
 		})
 
 		expect(result.current.subtotal).toBe(203.48)
+	})
+
+	it('recalculates discount, total and breakdown whenever items change', () => {
+		const { result } = renderCartHook()
+
+		act(() => {
+			result.current.addItem(firstProduct)
+			result.current.addItem(firstProduct)
+			result.current.addItem(firstProduct)
+			result.current.addItem(firstProduct)
+			result.current.addItem(firstProduct)
+		})
+
+		expect(result.current.subtotal).toBe(249.95)
+		expect(result.current.discount).toBeCloseTo(58.73825)
+		expect(result.current.total).toBeCloseTo(191.21175)
+		expect(result.current.discountBreakdown).toHaveLength(2)
+		expect(result.current.discountBreakdown[0]?.name).toBe('Bulk Discount')
+		expect(result.current.discountBreakdown[0]?.amount).toBeCloseTo(24.995)
+		expect(result.current.discountBreakdown[1]?.name).toBe('Order Discount')
+		expect(result.current.discountBreakdown[1]?.amount).toBeCloseTo(33.74325)
 	})
 })

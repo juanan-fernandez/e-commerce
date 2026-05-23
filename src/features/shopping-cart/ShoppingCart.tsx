@@ -2,9 +2,7 @@ import { CartItem, CartSummary } from './components'
 import { useCart } from '../../context/useCart'
 
 export function ShoppingCart() {
-	const { items, itemCount, subtotal, updateQuantity, removeItem } = useCart()
-	const discount = 0
-	const total = subtotal
+	const { items, itemCount, subtotal, discount, total, discountBreakdown, updateQuantity, removeItem } = useCart()
 	const isEmpty = items.length === 0
 
 	return (
@@ -35,7 +33,7 @@ export function ShoppingCart() {
 					<p className='text-base font-medium'>Your cart is empty</p>
 				</div>
 			) : (
-				<div className='grid gap-6 lg:grid-cols-[1.5fr_1fr]'>
+				<div className='space-y-6'>
 					<div className='space-y-4'>
 						{items.map(item => (
 							<CartItem
@@ -50,7 +48,13 @@ export function ShoppingCart() {
 							/>
 						))}
 					</div>
-					<CartSummary subtotal={subtotal} discount={discount} total={total} itemCount={itemCount} />
+					<CartSummary
+						subtotal={subtotal}
+						discount={discount}
+						total={total}
+						itemCount={itemCount}
+						discountBreakdown={discountBreakdown}
+					/>
 				</div>
 			)}
 		</section>

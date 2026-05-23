@@ -6,12 +6,17 @@ type CartSummaryProps = {
 	discount: number
 	total: number
 	itemCount: number
+	discountBreakdown: Array<{
+		name: string
+		amount: number
+	}>
 }
 
-export function CartSummary({ subtotal, discount, total, itemCount }: CartSummaryProps) {
-	const showDiscount = discount > 0
-	const showPromoMessage = subtotal < kBUSINESS_RULES.orderDiscount.minSubtotal
-	const missingAmount = kBUSINESS_RULES.orderDiscount.minSubtotal - subtotal
+export function CartSummary({ subtotal, discount, total, itemCount, discountBreakdown }: CartSummaryProps) {
+	const showDiscount = discountBreakdown.length > 0
+	const hasOrderDiscount = discountBreakdown.some(currentDiscount => currentDiscount.name === 'Order Discount')
+	const showPromoMessage = !hasOrderDiscount && total < kBUSINESS_RULES.orderDiscount.minSubtotal
+	const missingAmount = kBUSINESS_RULES.orderDiscount.minSubtotal - total
 	const promoAmount = `$${missingAmount.toFixed(2)}`
 
 	return (
@@ -27,12 +32,17 @@ export function CartSummary({ subtotal, discount, total, itemCount }: CartSummar
 					<span className='text-sm font-medium text-slate-900'>{formatPrice(subtotal)}</span>
 				</div>
 
-				{showDiscount ? (
-					<div className='flex items-center justify-between border-b border-slate-200 pb-3'>
-						<span className='text-sm text-slate-500'>Discount</span>
-						<span className='text-sm font-medium text-emerald-700'>-{formatPrice(discount)}</span>
-					</div>
-				) : null}
+				{showDiscount
+					? discountBreakdown.map(currentDiscount => (
+							<div
+								key={currentDiscount.name}
+								className='flex items-center justify-between border-b border-slate-200 pb-3'
+							>
+								<span className='text-sm text-slate-500'>{currentDiscount.name}</span>
+								<span className='text-sm font-medium text-emerald-700'>-{formatPrice(currentDiscount.amount)}</span>
+							</div>
+						))
+					: null}
 
 				<div className='flex items-center justify-between'>
 					<span className='text-base font-semibold text-slate-900'>Total</span>
