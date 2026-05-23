@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -31,5 +31,28 @@ describe('ProductCard', () => {
 
 		expect(onAddToCart).toHaveBeenCalledTimes(1)
 		expect(onAddToCart).toHaveBeenCalledWith(product)
+	})
+
+	it('shows a temporary success state and remains clickable after adding a product', async () => {
+		const user = userEvent.setup()
+		const onAddToCart = vi.fn()
+
+		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
+
+		await user.click(screen.getByRole('button', { name: 'Me lo llevo' }))
+
+		const addedButton = screen.getByRole('button', { name: 'Listo!' })
+
+		expect(addedButton).toBeInTheDocument()
+		expect(addedButton).toHaveClass('text-emerald-700')
+		expect(onAddToCart).toHaveBeenCalledTimes(1)
+
+		await user.click(addedButton)
+
+		expect(onAddToCart).toHaveBeenCalledTimes(2)
+
+		await waitFor(() => {
+			expect(screen.getByRole('button', { name: 'Me lo llevo' })).toBeInTheDocument()
+		}, { timeout: 2000 })
 	})
 })
