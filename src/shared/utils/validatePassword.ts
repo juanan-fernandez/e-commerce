@@ -28,7 +28,7 @@ export function validatePassword(password: string): ValidatePasswordResult {
 		errors.push(LOWERCASE_ERROR)
 	}
 
-	if (!/[0-9]/.test(password)) {
+	if (!/\d/.test(password)) {
 		errors.push(NUMBER_ERROR)
 	}
 
