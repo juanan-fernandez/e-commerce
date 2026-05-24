@@ -1,4 +1,5 @@
 import js from '@eslint/js'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
 import globals from 'globals'
 import sonarjs from 'eslint-plugin-sonarjs'
 import tseslint from 'typescript-eslint'
@@ -37,7 +38,7 @@ export default tseslint.config(
 	},
 	{
 		files: ['**/*.{ts,tsx}'],
-		extends: [...tseslint.configs.recommended, sonarjs.configs.recommended],
+		extends: [...tseslint.configs.recommended, sonarjs.configs.recommended, jsxA11y.flatConfigs.recommended],
 		languageOptions: {
 			ecmaVersion: 'latest',
 			sourceType: 'module',
