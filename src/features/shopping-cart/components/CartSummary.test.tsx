@@ -60,7 +60,7 @@ describe('CartSummary', () => {
 			<CartSummary subtotal={80} discount={0} total={80} itemCount={2} discountBreakdown={emptyDiscountBreakdown} />
 		)
 
-		expect(screen.getByText('Add $20.00 more for 15% off!')).toBeInTheDocument()
+		expect(screen.getByText('Add EUR 20,00 more for 15% off!')).toBeInTheDocument()
 	})
 
 	it('updates the promo message based on the remaining amount after current discounts', () => {
@@ -74,7 +74,7 @@ describe('CartSummary', () => {
 			/>
 		)
 
-		expect(screen.getByText('Add $10.00 more for 15% off!')).toBeInTheDocument()
+		expect(screen.getByText('Add EUR 10,00 more for 15% off!')).toBeInTheDocument()
 	})
 
 	it('does not show the promo message when subtotal is 100 or more', () => {
@@ -88,7 +88,7 @@ describe('CartSummary', () => {
 			/>
 		)
 
-		expect(screen.queryByText(/Add \$.* more for 15% off!/)).not.toBeInTheDocument()
+		expect(screen.queryByText(/Add EUR .* more for 15% off!/)).not.toBeInTheDocument()
 	})
 
 	it('renders the checkout button', () => {

@@ -17,7 +17,7 @@ export function CartSummary({ subtotal, discount, total, itemCount, discountBrea
 	const hasOrderDiscount = discountBreakdown.some(currentDiscount => currentDiscount.name === 'Order Discount')
 	const showPromoMessage = !hasOrderDiscount && total < kBUSINESS_RULES.orderDiscount.minSubtotal
 	const missingAmount = kBUSINESS_RULES.orderDiscount.minSubtotal - total
-	const promoAmount = `$${missingAmount.toFixed(2)}`
+	const promoAmount = formatPrice(missingAmount)
 
 	return (
 		<aside className='rounded-2xl bg-slate-100 p-6 shadow-md'>

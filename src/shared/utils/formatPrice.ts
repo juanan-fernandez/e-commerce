@@ -1,6 +1,8 @@
+import { PRICE_DECIMALS } from '@shared/constants'
+
 const euroFormatter = new Intl.NumberFormat('de-DE', {
-	minimumFractionDigits: 2,
-	maximumFractionDigits: 2
+	minimumFractionDigits: PRICE_DECIMALS,
+	maximumFractionDigits: PRICE_DECIMALS
 })
 
 export function formatPrice(value: number): string {
