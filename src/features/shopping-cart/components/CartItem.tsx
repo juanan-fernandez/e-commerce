@@ -13,6 +13,9 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 	const subTotal = item.product.price * item.quantity
 	const isDecreaseDisabled = item.quantity === kBUSINESS_RULES.quantity.min
 	const isIncreaseDisabled = item.quantity === kBUSINESS_RULES.quantity.max
+	const decreaseQuantityLabel = `Decrease quantity of ${item.product.name} in cart`
+	const increaseQuantityLabel = `Increase quantity of ${item.product.name} in cart`
+	const removeItemLabel = `Remove ${item.product.name} from your cart`
 
 	return (
 		<article className='rounded-xl border border-slate-200 bg-white p-4 shadow-sm'>
@@ -27,7 +30,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 				<div className='flex items-center gap-2'>
 					<button
 						type='button'
-						aria-label={`Decrease quantity for ${item.product.name}`}
+						aria-label={decreaseQuantityLabel}
 						className='cursor-pointer rounded-md border border-slate-300 px-3 py-2 text-slate-900 disabled:cursor-not-allowed disabled:opacity-50'
 						disabled={isDecreaseDisabled}
 						onClick={() => onUpdateQuantity(item.quantity - 1)}
@@ -37,7 +40,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 					<span data-testid='cart-item-quantity' className='min-w-6 text-center text-sm font-medium text-slate-900'>{item.quantity}</span>
 					<button
 						type='button'
-						aria-label={`Increase quantity for ${item.product.name}`}
+						aria-label={increaseQuantityLabel}
 						className='cursor-pointer rounded-md border border-slate-300 px-3 py-2 text-slate-900 disabled:cursor-not-allowed disabled:opacity-50'
 						disabled={isIncreaseDisabled}
 						onClick={() => onUpdateQuantity(item.quantity + 1)}
@@ -48,7 +51,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 				<p className='shrink-0 text-sm font-medium text-slate-700'>{formatPrice(subTotal)}</p>
 				<button
 					type='button'
-					aria-label={`Remove ${item.product.name} from cart`}
+					aria-label={removeItemLabel}
 					className='ml-auto cursor-pointer rounded-md bg-red-100 px-3 py-2 text-sm font-medium text-red-700'
 					onClick={onRemove}
 				>

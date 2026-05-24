@@ -43,7 +43,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={onUpdateQuantity} onRemove={vi.fn()} />)
 
-		await user.click(screen.getByRole('button', { name: `Increase quantity for ${WIRELESS_MOUSE}` }))
+		await user.click(screen.getByRole('button', { name: `Increase quantity of ${WIRELESS_MOUSE} in cart` }))
 
 		expect(onUpdateQuantity).toHaveBeenCalledTimes(1)
 		expect(onUpdateQuantity).toHaveBeenCalledWith(4)
@@ -56,7 +56,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={onUpdateQuantity} onRemove={vi.fn()} />)
 
-		await user.click(screen.getByRole('button', { name: `Decrease quantity for ${WIRELESS_MOUSE}` }))
+		await user.click(screen.getByRole('button', { name: `Decrease quantity of ${WIRELESS_MOUSE} in cart` }))
 
 		expect(onUpdateQuantity).toHaveBeenCalledTimes(1)
 		expect(onUpdateQuantity).toHaveBeenCalledWith(1)
@@ -67,7 +67,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={vi.fn()} />)
 
-		expect(screen.getByRole('button', { name: `Decrease quantity for ${WIRELESS_MOUSE}` })).toBeDisabled()
+		expect(screen.getByRole('button', { name: `Decrease quantity of ${WIRELESS_MOUSE} in cart` })).toBeDisabled()
 	})
 
 	it('disables the increase button when quantity is 99', () => {
@@ -75,7 +75,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={vi.fn()} />)
 
-		expect(screen.getByRole('button', { name: `Increase quantity for ${WIRELESS_MOUSE}` })).toBeDisabled()
+		expect(screen.getByRole('button', { name: `Increase quantity of ${WIRELESS_MOUSE} in cart` })).toBeDisabled()
 	})
 
 	it('calls onRemove when clicking the remove button', async () => {
@@ -85,7 +85,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={onRemove} />)
 
-		await user.click(screen.getByRole('button', { name: `Remove ${WIRELESS_MOUSE} from cart` }))
+		await user.click(screen.getByRole('button', { name: `Remove ${WIRELESS_MOUSE} from your cart` }))
 
 		expect(onRemove).toHaveBeenCalledTimes(1)
 	})
