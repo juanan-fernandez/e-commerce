@@ -29,7 +29,7 @@ export function CartSummary({ subtotal, discount, total, itemCount, discountBrea
 			<div className='space-y-3 py-4'>
 				<div className='flex items-center justify-between border-b border-slate-200 pb-3'>
 					<span className='text-sm text-slate-500'>Subtotal</span>
-					<span className='text-sm font-medium text-slate-900'>{formatPrice(subtotal)}</span>
+					<span data-testid='cart-summary-subtotal' className='text-sm font-medium text-slate-900'>{formatPrice(subtotal)}</span>
 				</div>
 
 				{showDiscount
@@ -46,7 +46,7 @@ export function CartSummary({ subtotal, discount, total, itemCount, discountBrea
 
 				<div className='flex items-center justify-between'>
 					<span className='text-base font-semibold text-slate-900'>Total</span>
-					<span className='text-2xl font-bold text-slate-950'>{formatPrice(total)}</span>
+					<span data-testid='cart-summary-total' className='text-2xl font-bold text-slate-950'>{formatPrice(total)}</span>
 				</div>
 			</div>
 

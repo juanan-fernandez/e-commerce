@@ -33,7 +33,7 @@ export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 					>
 						-
 					</button>
-					<span className='min-w-6 text-center text-sm font-medium text-slate-900'>{item.quantity}</span>
+					<span data-testid='cart-item-quantity' className='min-w-6 text-center text-sm font-medium text-slate-900'>{item.quantity}</span>
 					<button
 						type='button'
 						aria-label={`Increase quantity for ${item.product.name}`}
