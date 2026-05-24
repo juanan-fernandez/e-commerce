@@ -1,3 +1,4 @@
+import { createContext } from 'react'
 import type { CartItem } from '@shared/types/Cart'
 import type { Product } from '@shared/types/Product'
 
@@ -16,3 +17,5 @@ export type CartContextValue = {
 	updateQuantity: (productId: string, quantity: number) => void
 	clearCart: () => void
 }
+
+export const CartContext = createContext<CartContextValue | undefined>(undefined)

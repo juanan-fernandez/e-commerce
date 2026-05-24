@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
-import { createContext, createElement, useEffect, useReducer, useRef } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
+import { DiscountCalculator } from '@shared/strategies/DiscountCalculator'
 import type { CartItem } from '@shared/types/Cart'
 import type { Product } from '@shared/types/Product'
-import { DiscountCalculator } from '@shared/strategies/DiscountCalculator'
 import { calculateCartSubTotal } from '@shared/utils/calculateCartSubTotal'
-import type { CartContextValue } from './CartContextValue'
+import { CartContext, type CartContextValue } from './CartContextValue'
 
 type CartState = CartItem[]
 
@@ -34,8 +34,6 @@ type CartAction = AddItemAction | RemoveItemAction | UpdateQuantityAction | Clea
 
 const CART_STORAGE_KEY = 'cart-items'
 const discountCalculator = new DiscountCalculator()
-
-export const CartContext = createContext<CartContextValue | undefined>(undefined)
 
 function cartReducer(state: CartState, action: CartAction): CartState {
 	switch (action.type) {
@@ -83,9 +81,9 @@ function initializeCart(): CartState {
 	}
 }
 
-type CartProviderProps = {
+type CartProviderProps = Readonly<{
 	children: ReactNode
-}
+}>
 
 export function CartProvider({ children }: CartProviderProps) {
 	const [items, dispatch] = useReducer(cartReducer, [], initializeCart)
@@ -106,7 +104,7 @@ export function CartProvider({ children }: CartProviderProps) {
 
 	const value: CartContextValue = {
 		items,
-		itemCount: items.reduce((total, item) => total + item.quantity, 0),
+		itemCount: items.reduce((totalItems, item) => totalItems + item.quantity, 0),
 		subtotal,
 		discount,
 		total,
@@ -120,13 +118,13 @@ export function CartProvider({ children }: CartProviderProps) {
 		updateQuantity: (productId, quantity) => {
 			dispatch({
 				type: 'UPDATE_QUANTITY',
-				payload: { productId, quantity }
+				payload: { productId, quantity },
 			})
 		},
 		clearCart: () => {
 			dispatch({ type: 'CLEAR_CART' })
-		}
+		},
 	}
 
-	return createElement(CartContext.Provider, { value }, children)
+	return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
