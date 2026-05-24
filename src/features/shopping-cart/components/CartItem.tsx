@@ -2,11 +2,11 @@ import { kBUSINESS_RULES } from '@shared/constants/businessRules'
 import type { CartItem as CartItemType } from '@shared/types/Cart'
 import { formatPrice } from '@shared/utils/formatPrice'
 
-type CartItemProps = {
+type CartItemProps = Readonly<{
 	item: CartItemType
 	onUpdateQuantity: (quantity: number) => void
 	onRemove: () => void
-}
+}>
 
 export function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
 	const subTotal = item.product.price * item.quantity

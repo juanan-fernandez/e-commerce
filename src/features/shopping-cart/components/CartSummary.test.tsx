@@ -2,6 +2,8 @@ import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 import { CartSummary } from './CartSummary'
 
+const BULK_DISCOUNT = 'Bulk Discount'
+
 describe('CartSummary', () => {
 	const emptyDiscountBreakdown: Array<{ name: string; amount: number }> = []
 
@@ -23,11 +25,11 @@ describe('CartSummary', () => {
 				discount={18}
 				total={102}
 				itemCount={3}
-				discountBreakdown={[{ name: 'Bulk Discount', amount: 18 }]}
+				discountBreakdown={[{ name: BULK_DISCOUNT, amount: 18 }]}
 			/>
 		)
 
-		expect(screen.getByText('Bulk Discount')).toBeInTheDocument()
+		expect(screen.getByText(BULK_DISCOUNT)).toBeInTheDocument()
 		expect(screen.getByText('-EUR 18,00')).toBeInTheDocument()
 	})
 
@@ -46,7 +48,7 @@ describe('CartSummary', () => {
 				discount={18}
 				total={102}
 				itemCount={3}
-				discountBreakdown={[{ name: 'Bulk Discount', amount: 18 }]}
+				discountBreakdown={[{ name: BULK_DISCOUNT, amount: 18 }]}
 			/>
 		)
 
@@ -68,7 +70,7 @@ describe('CartSummary', () => {
 				discount={10}
 				total={90}
 				itemCount={5}
-				discountBreakdown={[{ name: 'Bulk Discount', amount: 10 }]}
+				discountBreakdown={[{ name: BULK_DISCOUNT, amount: 10 }]}
 			/>
 		)
 
@@ -96,7 +98,7 @@ describe('CartSummary', () => {
 				discount={18}
 				total={102}
 				itemCount={3}
-				discountBreakdown={[{ name: 'Bulk Discount', amount: 18 }]}
+				discountBreakdown={[{ name: BULK_DISCOUNT, amount: 18 }]}
 			/>
 		)
 

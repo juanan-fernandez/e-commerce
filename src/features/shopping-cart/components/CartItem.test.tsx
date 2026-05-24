@@ -4,11 +4,13 @@ import { describe, expect, it, vi } from 'vitest'
 import type { CartItem as CartItemType } from '@shared/types/Cart'
 import { CartItem } from './CartItem'
 
+const WIRELESS_MOUSE = 'Wireless Mouse'
+
 function createCartItem(overrides: Partial<CartItemType> = {}): CartItemType {
 	return {
 		product: {
 			id: 'wireless-mouse',
-			name: 'Wireless Mouse',
+			name: WIRELESS_MOUSE,
 			description: 'Compact mouse for daily work.',
 			price: 49.99,
 			image: 'https://picsum.photos/seed/wireless-mouse/200'
@@ -24,11 +26,11 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={vi.fn()} />)
 
-		expect(screen.getByRole('img', { name: 'Wireless Mouse' })).toHaveAttribute(
+		expect(screen.getByRole('img', { name: WIRELESS_MOUSE })).toHaveAttribute(
 			'src',
 			'https://picsum.photos/seed/wireless-mouse/200'
 		)
-		expect(screen.getByText('Wireless Mouse')).toBeInTheDocument()
+		expect(screen.getByText(WIRELESS_MOUSE)).toBeInTheDocument()
 		expect(screen.getByText('EUR 49,99')).toBeInTheDocument()
 		expect(screen.getByText('3')).toBeInTheDocument()
 		expect(screen.getByText('EUR 149,97')).toBeInTheDocument()
@@ -41,7 +43,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={onUpdateQuantity} onRemove={vi.fn()} />)
 
-		await user.click(screen.getByRole('button', { name: 'Increase quantity for Wireless Mouse' }))
+		await user.click(screen.getByRole('button', { name: `Increase quantity for ${WIRELESS_MOUSE}` }))
 
 		expect(onUpdateQuantity).toHaveBeenCalledTimes(1)
 		expect(onUpdateQuantity).toHaveBeenCalledWith(4)
@@ -54,7 +56,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={onUpdateQuantity} onRemove={vi.fn()} />)
 
-		await user.click(screen.getByRole('button', { name: 'Decrease quantity for Wireless Mouse' }))
+		await user.click(screen.getByRole('button', { name: `Decrease quantity for ${WIRELESS_MOUSE}` }))
 
 		expect(onUpdateQuantity).toHaveBeenCalledTimes(1)
 		expect(onUpdateQuantity).toHaveBeenCalledWith(1)
@@ -65,7 +67,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={vi.fn()} />)
 
-		expect(screen.getByRole('button', { name: 'Decrease quantity for Wireless Mouse' })).toBeDisabled()
+		expect(screen.getByRole('button', { name: `Decrease quantity for ${WIRELESS_MOUSE}` })).toBeDisabled()
 	})
 
 	it('disables the increase button when quantity is 99', () => {
@@ -73,7 +75,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={vi.fn()} />)
 
-		expect(screen.getByRole('button', { name: 'Increase quantity for Wireless Mouse' })).toBeDisabled()
+		expect(screen.getByRole('button', { name: `Increase quantity for ${WIRELESS_MOUSE}` })).toBeDisabled()
 	})
 
 	it('calls onRemove when clicking the remove button', async () => {
@@ -83,7 +85,7 @@ describe('CartItem', () => {
 
 		render(<CartItem item={item} onUpdateQuantity={vi.fn()} onRemove={onRemove} />)
 
-		await user.click(screen.getByRole('button', { name: 'Remove Wireless Mouse from cart' }))
+		await user.click(screen.getByRole('button', { name: `Remove ${WIRELESS_MOUSE} from cart` }))
 
 		expect(onRemove).toHaveBeenCalledTimes(1)
 	})

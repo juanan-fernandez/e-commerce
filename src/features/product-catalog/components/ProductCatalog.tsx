@@ -2,9 +2,9 @@ import { products } from '@shared/data/products'
 import type { Product } from '@shared/types/Product'
 import ProductCard from './ProductCard'
 
-type ProductCatalogProps = {
+type ProductCatalogProps = Readonly<{
 	onAddToCart?: (product: Product) => void
-}
+}>
 
 function ProductCatalog({ onAddToCart = () => undefined }: ProductCatalogProps) {
 	return (

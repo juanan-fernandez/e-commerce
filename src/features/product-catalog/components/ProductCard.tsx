@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import type { Product } from '@shared/types/Product'
 import { formatPrice } from '@shared/utils/formatPrice'
 
-type ProductCardProps = {
+type ProductCardProps = Readonly<{
 	product: Product
 	onAddToCart: (product: Product) => void
-}
+}>
 
 function ProductCard({ product, onAddToCart }: ProductCardProps) {
 	const [buttonState, setButtonState] = useState<'idle' | 'added'>('idle')

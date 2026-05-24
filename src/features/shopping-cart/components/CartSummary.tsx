@@ -1,7 +1,7 @@
 import { kBUSINESS_RULES } from '@shared/constants/businessRules'
 import { formatPrice } from '@shared/utils/formatPrice'
 
-type CartSummaryProps = {
+type CartSummaryProps = Readonly<{
 	subtotal: number
 	discount: number
 	total: number
@@ -10,10 +10,10 @@ type CartSummaryProps = {
 		name: string
 		amount: number
 	}>
-}
+}>
 
 export function CartSummary({ subtotal, discount, total, itemCount, discountBreakdown }: CartSummaryProps) {
-	const showDiscount = discountBreakdown.length > 0
+	const showDiscount = discount > 0
 	const hasOrderDiscount = discountBreakdown.some(currentDiscount => currentDiscount.name === 'Order Discount')
 	const showPromoMessage = !hasOrderDiscount && total < kBUSINESS_RULES.orderDiscount.minSubtotal
 	const missingAmount = kBUSINESS_RULES.orderDiscount.minSubtotal - total
