@@ -4,14 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "packageManager": "pnpm@10.27.0",
-  "pnpm": {
-    "allowBuilds": {
-      "opencode-ai": true
-    }
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run --passWithNoTests",
@@ -27,6 +24,7 @@
     "react-router-dom": "^7.6.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.54.2",
     "@tailwindcss/vite": "^4.1.13",
     "@testing-library/jest-dom": "^6.6.3",
@@ -37,10 +35,14 @@
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.5.2",
     "@vitest/coverage-v8": "^2.1.9",
+    "eslint": "^10.4.0",
+    "eslint-plugin-sonarjs": "^4.0.3",
+    "globals": "^17.6.0",
     "husky": "^9.1.7",
     "jsdom": "^26.1.0",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.59.4",
     "vite": "^5.4.19",
     "vitest": "^2.1.9"
   }
