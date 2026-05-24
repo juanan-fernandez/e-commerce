@@ -2,9 +2,8 @@ import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { UI_TEXT } from '@shared/constants/ui'
 import ProductCard from './ProductCard'
-
-const ADD_TO_CART_LABEL = 'Me lo llevo'
 
 describe('ProductCard', () => {
 	const product = {
@@ -20,7 +19,7 @@ describe('ProductCard', () => {
 
 		expect(screen.getByText('Zapatillas retro')).toBeInTheDocument()
 		expect(screen.getByText('EUR 49,90')).toBeInTheDocument()
-		expect(screen.getByRole('button', { name: ADD_TO_CART_LABEL })).toBeInTheDocument()
+		expect(screen.getByRole('button', { name: UI_TEXT.addToCart })).toBeInTheDocument()
 	})
 
 	it('calls onAddToCart with the product when the button is clicked', async () => {
@@ -29,7 +28,7 @@ describe('ProductCard', () => {
 
 		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
 
-		await user.click(screen.getByRole('button', { name: ADD_TO_CART_LABEL }))
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
 
 		expect(onAddToCart).toHaveBeenCalledTimes(1)
 		expect(onAddToCart).toHaveBeenCalledWith(product)
@@ -41,7 +40,7 @@ describe('ProductCard', () => {
 
 		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
 
-		await user.click(screen.getByRole('button', { name: ADD_TO_CART_LABEL }))
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
 
 		const addedButton = screen.getByRole('button', { name: 'Listo!' })
 
@@ -54,7 +53,7 @@ describe('ProductCard', () => {
 		expect(onAddToCart).toHaveBeenCalledTimes(2)
 
 		await waitFor(() => {
-			expect(screen.getByRole('button', { name: ADD_TO_CART_LABEL })).toBeInTheDocument()
+			expect(screen.getByRole('button', { name: UI_TEXT.addToCart })).toBeInTheDocument()
 		}, { timeout: 2000 })
 	})
 })

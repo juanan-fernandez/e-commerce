@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Product } from '@shared/types/Product'
+import { UI_TEXT } from '@shared/constants/ui'
 import { formatPrice } from '@shared/utils/formatPrice'
 
 type ProductCardProps = Readonly<{
@@ -48,7 +49,7 @@ function ProductCard({ product, onAddToCart }: ProductCardProps) {
 				}`}
 				onClick={handleAddToCart}
 			>
-				{buttonState === 'added' ? 'Listo!' : 'Me lo llevo'}
+				{buttonState === 'added' ? 'Listo!' : UI_TEXT.addToCart}
 			</button>
 		</article>
 	)

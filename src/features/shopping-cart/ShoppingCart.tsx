@@ -1,4 +1,5 @@
 import { CartItem, CartSummary } from './components'
+import { UI_TEXT } from '@shared/constants/ui'
 import { useCart } from '../../context/useCart'
 
 export function ShoppingCart() {
@@ -30,7 +31,7 @@ export function ShoppingCart() {
 							<path d='M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L21 7H7' />
 						</svg>
 					</div>
-					<p className='text-base font-medium'>Your cart is empty</p>
+					<p className='text-base font-medium'>{UI_TEXT.emptyCart}</p>
 				</div>
 			) : (
 				<div className='space-y-6'>

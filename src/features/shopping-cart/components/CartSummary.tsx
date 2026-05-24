@@ -1,4 +1,5 @@
 import { kBUSINESS_RULES } from '@shared/constants/businessRules'
+import { UI_TEXT } from '@shared/constants/ui'
 import { formatPrice } from '@shared/utils/formatPrice'
 
 type CartSummaryProps = Readonly<{
@@ -60,7 +61,7 @@ export function CartSummary({ subtotal, discount, total, itemCount, discountBrea
 				type='button'
 				className='mt-4 w-full cursor-pointer rounded-xl bg-cyan-600 px-4 py-3 text-sm font-semibold text-white shadow-sm hover:bg-cyan-700'
 			>
-				Confirmar pedido
+				{UI_TEXT.checkout}
 			</button>
 		</aside>
 	)

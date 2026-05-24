@@ -9,7 +9,7 @@ export class ShoppingCartPage {
 	constructor(page: Page) {
 		this.page = page
 		this.heading = page.getByRole('heading', { name: 'Shopping Cart' })
-		this.emptyMessage = page.getByText('Your cart is empty')
+		this.emptyMessage = page.getByText('Tu carrito está vacío')
 		this.checkoutButton = page.getByRole('button', { name: 'Confirmar pedido' })
 	}
 

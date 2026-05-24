@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { UI_TEXT } from '@shared/constants/ui'
 import { CartSummary } from './CartSummary'
 
 const BULK_DISCOUNT = 'Bulk Discount'
@@ -102,6 +103,6 @@ describe('CartSummary', () => {
 			/>
 		)
 
-		expect(screen.getByRole('button', { name: 'Confirmar pedido' })).toBeInTheDocument()
+		expect(screen.getByRole('button', { name: UI_TEXT.checkout })).toBeInTheDocument()
 	})
 })
