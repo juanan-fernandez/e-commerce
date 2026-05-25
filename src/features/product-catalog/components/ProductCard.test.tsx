@@ -14,7 +14,7 @@ describe('ProductCard', () => {
 		image: '/images/zapatillas-retro.jpg'
 	}
 
-	it('shows the product name, formatted price and add to cart button', () => {
+	it('renders product name, price and idle add-to-cart button', () => {
 		render(<ProductCard product={product} onAddToCart={vi.fn()} />)
 
 		expect(screen.getByText('Zapatillas retro')).toBeInTheDocument()
@@ -22,7 +22,7 @@ describe('ProductCard', () => {
 		expect(screen.getByRole('button', { name: UI_TEXT.addToCart })).toBeInTheDocument()
 	})
 
-	it('calls onAddToCart with the product when the button is clicked', async () => {
+	it('calls onAddToCart with the product on click', async () => {
 		const user = userEvent.setup()
 		const onAddToCart = vi.fn()
 
@@ -34,26 +34,90 @@ describe('ProductCard', () => {
 		expect(onAddToCart).toHaveBeenCalledWith(product)
 	})
 
-	it('shows a temporary success state and remains clickable after adding a product', async () => {
+	it('shows loading state immediately after click and disables the button', async () => {
+		const user = userEvent.setup()
+		let resolveAddToCart: (() => void) | undefined
+		const onAddToCart = vi.fn(() => new Promise<void>(resolve => {
+			resolveAddToCart = resolve
+		}))
+
+		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
+
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
+
+		const loadingButton = await screen.findByRole('button', { name: 'Añadiendo...' })
+		expect(loadingButton).toBeInTheDocument()
+		expect(loadingButton).toBeDisabled()
+
+		resolveAddToCart?.()
+		await screen.findByRole('button', { name: 'Listo!' })
+	})
+
+	it('shows success state with green styles after the operation completes', async () => {
+		const user = userEvent.setup()
+
+		render(<ProductCard product={product} onAddToCart={vi.fn()} />)
+
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
+
+		const successButton = await screen.findByRole('button', { name: 'Listo!' })
+		expect(successButton).toBeInTheDocument()
+		expect(successButton).toHaveClass('bg-emerald-100')
+	})
+
+	it('returns to idle state after success timeout', async () => {
+		const user = userEvent.setup()
+
+		render(<ProductCard product={product} onAddToCart={vi.fn()} />)
+
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
+		await screen.findByRole('button', { name: 'Listo!' })
+
+		await waitFor(() => {
+			expect(screen.getByRole('button', { name: UI_TEXT.addToCart })).toBeInTheDocument()
+		}, { timeout: 3000 })
+	})
+
+	it('remains clickable after returning to idle', async () => {
 		const user = userEvent.setup()
 		const onAddToCart = vi.fn()
 
 		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
 
 		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
+		await screen.findByRole('button', { name: 'Listo!' })
+		await waitFor(() => {
+			expect(screen.getByRole('button', { name: UI_TEXT.addToCart })).toBeInTheDocument()
+		}, { timeout: 3000 })
 
-		const addedButton = screen.getByRole('button', { name: 'Listo!' })
-
-		expect(addedButton).toBeInTheDocument()
-		expect(addedButton).toHaveClass('text-emerald-700')
-		expect(onAddToCart).toHaveBeenCalledTimes(1)
-
-		await user.click(addedButton)
-
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
 		expect(onAddToCart).toHaveBeenCalledTimes(2)
+	})
+
+	it('shows error state with red styles when onAddToCart fails', async () => {
+		const user = userEvent.setup()
+		const onAddToCart = vi.fn().mockRejectedValue(new Error('Failed'))
+
+		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
+
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
+
+		const errorButton = await screen.findByRole('button', { name: 'Error' })
+		expect(errorButton).toBeInTheDocument()
+		expect(errorButton).toHaveClass('bg-red-100')
+	})
+
+	it('returns to idle after error timeout', async () => {
+		const user = userEvent.setup()
+		const onAddToCart = vi.fn().mockRejectedValue(new Error('Failed'))
+
+		render(<ProductCard product={product} onAddToCart={onAddToCart} />)
+
+		await user.click(screen.getByRole('button', { name: UI_TEXT.addToCart }))
+		await screen.findByRole('button', { name: 'Error' })
 
 		await waitFor(() => {
 			expect(screen.getByRole('button', { name: UI_TEXT.addToCart })).toBeInTheDocument()
-		}, { timeout: 2000 })
+		}, { timeout: 5000 })
 	})
 })
