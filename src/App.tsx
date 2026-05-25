@@ -1,15 +1,54 @@
+import { useEffect, useRef, useState } from 'react'
 import LoginDemo from '@features/auth/LoginDemo'
 import ProductCatalog from '@features/product-catalog/components/ProductCatalog'
 import ShoppingCart from '@features/shopping-cart/ShoppingCart'
+import Toast from '@shared/components/Toast'
 import { CartProvider } from './context/CartContext'
 import { useCart } from './context/useCart'
 
+type ToastNotification = Readonly<{
+	message: string
+	variant: 'success' | 'info'
+}>
+
 function AppContent() {
 	const { addItem, itemCount } = useCart()
+	const [toast, setToast] = useState<ToastNotification | null>(null)
+	const previousItemCountRef = useRef<number | null>(null)
 	const cartItemCountLabel = `Shopping cart with ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`
+
+	useEffect(() => {
+		if (previousItemCountRef.current === null) {
+			previousItemCountRef.current = itemCount
+			return
+		}
+
+		if (itemCount > previousItemCountRef.current) {
+			setToast({ message: 'Añadido correctamente', variant: 'success' })
+		}
+
+		if (itemCount < previousItemCountRef.current) {
+			setToast({ message: 'Producto eliminado del carrito', variant: 'info' })
+		}
+
+		previousItemCountRef.current = itemCount
+	}, [itemCount])
 
 	return (
 		<div className='min-h-screen bg-slate-200 px-6 py-8 text-slate-950 lg:py-12'>
+			{toast ? (
+				<div className='pointer-events-none fixed right-4 top-4 z-50 w-full max-w-sm'>
+					<div className='pointer-events-auto'>
+						<Toast
+							message={toast.message}
+							variant={toast.variant}
+							onClose={() => {
+								setToast(null)
+							}}
+						/>
+					</div>
+				</div>
+			) : null}
 			<div className='mx-auto max-w-7xl'>
 				<header className='mb-8 rounded-2xl bg-white px-5 py-4 shadow-sm lg:mb-10 lg:px-6'>
 					<div className='flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between'>
