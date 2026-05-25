@@ -1,4 +1,5 @@
 import { type FormEvent, useState } from 'react'
+import * as Sentry from '@sentry/react'
 import PasswordInput from './components/PasswordInput'
 import { validatePassword } from '@shared/utils'
 
@@ -42,6 +43,12 @@ function LoginDemo() {
 		}
 
 		if (email === DEMO_EMAIL) {
+			Sentry.setUser({
+				id: email,
+				email,
+				username: email
+			})
+
 			setStatus('success')
 			return
 		}
