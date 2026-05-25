@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import * as Sentry from '@sentry/react'
 import { useEffect, useReducer, useRef } from 'react'
 import { DiscountCalculator } from '@shared/strategies/DiscountCalculator'
 import type { CartItem } from '@shared/types/Cart'
@@ -34,6 +35,19 @@ type CartAction = AddItemAction | RemoveItemAction | UpdateQuantityAction | Clea
 
 const CART_STORAGE_KEY = 'cart-items'
 const discountCalculator = new DiscountCalculator()
+
+function getItemCount(items: CartState): number {
+	return items.reduce((totalItems, item) => totalItems + item.quantity, 0)
+}
+
+function addCartBreadcrumb(message: string, data: Record<string, string | number | undefined>) {
+	Sentry.addBreadcrumb({
+		category: 'cart',
+		message,
+		level: 'info',
+		data,
+	})
+}
 
 function cartReducer(state: CartState, action: CartAction): CartState {
 	switch (action.type) {
@@ -104,24 +118,66 @@ export function CartProvider({ children }: CartProviderProps) {
 
 	const value: CartContextValue = {
 		items,
-		itemCount: items.reduce((totalItems, item) => totalItems + item.quantity, 0),
+		itemCount: getItemCount(items),
 		subtotal,
 		discount,
 		total,
 		discountBreakdown,
 		addItem: product => {
+			const existingItem = items.find(item => item.product.id === product.id)
+
+			addCartBreadcrumb('Cart item added', {
+				productId: product.id,
+				productName: product.name,
+				quantity: existingItem ? existingItem.quantity + 1 : 1,
+				itemCountBefore: getItemCount(items),
+				itemCountAfter: getItemCount(items) + 1,
+			})
+
 			dispatch({ type: 'ADD_ITEM', payload: product })
 		},
 		removeItem: productId => {
+			const existingItem = items.find(item => item.product.id === productId)
+			const itemCountBefore = getItemCount(items)
+			const removedQuantity = existingItem?.quantity ?? 0
+
+			addCartBreadcrumb('Cart item removed', {
+				productId,
+				productName: existingItem?.product.name,
+				quantity: removedQuantity,
+				itemCountBefore,
+				itemCountAfter: Math.max(0, itemCountBefore - removedQuantity),
+			})
+
 			dispatch({ type: 'REMOVE_ITEM', payload: productId })
 		},
 		updateQuantity: (productId, quantity) => {
+			const existingItem = items.find(item => item.product.id === productId)
+			const currentQuantity = existingItem?.quantity ?? 0
+			const itemCountBefore = getItemCount(items)
+			const itemCountAfter = itemCountBefore - currentQuantity + quantity
+
+			addCartBreadcrumb('Cart item quantity updated', {
+				productId,
+				productName: existingItem?.product.name,
+				quantity,
+				previousQuantity: currentQuantity,
+				itemCountBefore,
+				itemCountAfter: Math.max(0, itemCountAfter),
+			})
+
 			dispatch({
 				type: 'UPDATE_QUANTITY',
 				payload: { productId, quantity },
 			})
 		},
 		clearCart: () => {
+			addCartBreadcrumb('Cart cleared', {
+				itemCountBefore: getItemCount(items),
+				itemCountAfter: 0,
+				productsRemoved: items.length,
+			})
+
 			dispatch({ type: 'CLEAR_CART' })
 		},
 	}
