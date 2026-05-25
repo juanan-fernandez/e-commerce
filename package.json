@@ -19,6 +19,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@sentry/react": "^10.53.1",
     "opencode-ai": "^1.15.10",
     "opencode-darwin-arm64": "1.15.10",
     "react": "^18.3.1",
