@@ -1,13 +1,19 @@
 import { CartItem, CartSummary } from './components'
 import { UI_TEXT } from '@shared/constants/ui'
+import { formatPrice } from '@shared/utils/formatPrice'
 import { useCart } from '../../context/useCart'
 
 export function ShoppingCart() {
 	const { items, itemCount, subtotal, discount, total, discountBreakdown, updateQuantity, removeItem } = useCart()
 	const isEmpty = items.length === 0
+	const itemLabel = itemCount === 1 ? 'articulo' : 'articulos'
+	const cartAnnouncement = `Carrito actualizado: ${itemCount} ${itemLabel}. Total ${formatPrice(total)}.`
 
 	return (
 		<section className='space-y-6'>
+			<p aria-live='polite' aria-atomic='true' className='sr-only'>
+				{cartAnnouncement}
+			</p>
 			<header className='flex items-center gap-3'>
 				<h2 className='text-3xl font-bold tracking-tight text-slate-950'>Shopping Cart</h2>
 				<span className='rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white'>
