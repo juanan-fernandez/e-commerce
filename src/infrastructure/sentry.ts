@@ -1,5 +1,7 @@
 import * as Sentry from '@sentry/react'
 
+const SENTRY_TEST_MESSAGE = 'Sentry configuration test from development header'
+
 export function initSentry() {
 	const dsn = import.meta.env.VITE_SENTRY_DSN
 
@@ -19,4 +21,12 @@ export function initSentry() {
 		replaysSessionSampleRate: 0.1,
 		replaysOnErrorSampleRate: 1.0,
 	})
+}
+
+export function isDevelopmentEnvironment(): boolean {
+	return import.meta.env.DEV
+}
+
+export function captureSentryTestError() {
+	Sentry.captureException(new Error(SENTRY_TEST_MESSAGE))
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import LoginDemo from '@features/auth/LoginDemo'
 import ProductCatalog from '@features/product-catalog/components/ProductCatalog'
 import ShoppingCart from '@features/shopping-cart/ShoppingCart'
+import { captureSentryTestError, isDevelopmentEnvironment } from '@infrastructure/sentry'
 import Toast from '@shared/components/Toast'
 import { CartProvider } from './context/CartContext'
 import { useCart } from './context/useCart'
@@ -16,6 +17,7 @@ function AppContent() {
 	const [toast, setToast] = useState<ToastNotification | null>(null)
 	const previousItemCountRef = useRef<number | null>(null)
 	const cartItemCountLabel = `Shopping cart with ${itemCount} ${itemCount === 1 ? 'item' : 'items'}`
+	const shouldShowSentryTestButton = isDevelopmentEnvironment()
 
 	useEffect(() => {
 		if (previousItemCountRef.current === null) {
@@ -58,6 +60,15 @@ function AppContent() {
 								<h1 className='text-2xl font-bold tracking-tight text-slate-950 lg:text-3xl'>
 									Simple Product Shop
 								</h1>
+								{shouldShowSentryTestButton ? (
+									<button
+										type='button'
+										className='mt-3 cursor-pointer rounded-md border border-amber-300 bg-amber-50 px-3 py-2 text-sm font-semibold text-amber-900 transition hover:bg-amber-100'
+										onClick={captureSentryTestError}
+									>
+										Probar Sentry
+									</button>
+								) : null}
 							</div>
 							<div
 								role='status'
@@ -76,7 +87,10 @@ function AppContent() {
 									<circle cx='17' cy='20' r='1.5' />
 									<path d='M3 4h2l2.4 10.2a1 1 0 0 0 1 .8h8.8a1 1 0 0 0 1-.8L21 7H7' />
 								</svg>
-								<span aria-hidden='true' className='absolute -right-1 -top-1 flex min-h-6 min-w-6 items-center justify-center rounded-full bg-cyan-500 px-1.5 text-xs font-bold text-slate-950'>
+								<span
+									aria-hidden='true'
+									className='absolute -right-1 -top-1 flex min-h-6 min-w-6 items-center justify-center rounded-full bg-cyan-500 px-1.5 text-xs font-bold text-slate-950'
+								>
 									{itemCount}
 								</span>
 							</div>
