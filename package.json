@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package.json",
   "name": "shopping-cart-app",
   "private": true,
   "version": "0.0.0",
@@ -10,7 +11,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit",
-    "quality": "pnpm lint && pnpm typecheck && pnpm test",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test:run && pnpm test:e2e && pnpm build",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run --passWithNoTests",
