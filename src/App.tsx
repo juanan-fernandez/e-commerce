@@ -95,7 +95,7 @@ function AppContent() {
 								</span>
 							</div>
 						</div>
-						<div className='lg:w-[28rem]'>
+						<div className='lg:w-md'>
 							<LoginDemo />
 						</div>
 					</div>
