@@ -1,1 +1,14 @@
-pnpm lint && pnpm typecheck
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+
+# Lint
+echo "📝 Checking lint..."
+pnpm lint || exit 1
+
+# Typecheck
+echo "🔷 Checking types..."
+pnpm typecheck || exit 1
+
+echo "✅ Pre-commit checks passed!"
